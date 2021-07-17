@@ -16,7 +16,7 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
-config.set_main_option('sqlalchemy.url', settings.alembic_dsn)
+config.set_main_option('sqlalchemy.url', settings.db.alembic_dsn)
 
 # add your model's MetaData object here
 # for 'autogenerate' support

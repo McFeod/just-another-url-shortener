@@ -23,6 +23,8 @@ services:
             - DB_USER=${POSTGRES_USER}
             - DB_NAME=${POSTGRES_DB}
             - DB_PASSWORD=${POSTGRES_PASSWORD}
+            - PREFERRED_SLUG_LENGTH=${PREFERRED_SLUG_LENGTH}
+            - SHORT_DOMAIN=${SHORT_DOMAIN}
         depends_on:
             - db
         command: bash -c "alembic upgrade head && uvicorn --host 0.0.0.0 --port ${API_PORT} main:app"

@@ -1,22 +1,35 @@
-from pydantic import BaseSettings
+from pydantic import BaseSettings, Field
 
 
-class Settings(BaseSettings):
-    db_host: str
-    db_user: str
-    db_name: str
-    db_password: str
+class DBSettings(BaseSettings):
+    host: str
+    user: str
+    name: str
+    password: str
 
     def prepare_db_url(self, driver: str) -> str:
-        return f'postgresql+{driver}://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}'
+        return f'postgresql+{driver}://{self.user}:{self.password}@{self.host}/{self.name}'
 
     @property
-    def db_dsn(self) -> str:
+    def dsn(self) -> str:
         return self.prepare_db_url('asyncpg')
 
     @property
     def alembic_dsn(self) -> str:
         return self.prepare_db_url('psycopg2')
+    
+    class Config:
+        env_prefix = 'db_'
+
+
+class AppSettings(BaseSettings):
+    preferred_slug_length: int = Field(gt=1, le=12)
+    short_domain: str
+
+
+class Settings(BaseSettings):
+    app: AppSettings = AppSettings()
+    db: DBSettings = DBSettings()
 
 
 settings = Settings()
