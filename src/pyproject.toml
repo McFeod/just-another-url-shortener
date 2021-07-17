@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "url_shortener"
+version = "0.1.0"
+description = "Just another URL shortener"
+authors = ["Georgy Fedoseyev"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "3.9.6"
+fastapi = "0.66.0"
+uvicorn = "0.14.0"
+gunicorn = "20.1.0"
+SQLAlchemy = "1.4.21"
+alembic = "1.6.5"
+asyncpg = "0.23.0"
+psycopg2-binary = "2.9.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

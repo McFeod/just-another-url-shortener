@@ -10,18 +10,22 @@ services:
                 - API_PORT=${API_PORT}
                 - POETRY_VERSION=${POETRY_VERSION}
         container_name: ${PROJECT_NAME}_api
+        restart: unless-stopped
         ports: 
             - '${MAPPING}:${API_PORT}'
         networks:
             - backend
         hostname: ${API_HOSTNAME}
-        volumes: 
+        volumes:
             - $PWD/src:/code
         environment:
             - DB_HOST=${POSTGRES_HOSTNAME}
             - DB_USER=${POSTGRES_USER}
             - DB_NAME=${POSTGRES_DB}
             - DB_PASSWORD=${POSTGRES_PASSWORD}
+        depends_on:
+            - db
+        command: bash -c "alembic upgrade head && uvicorn --host 0.0.0.0 --port ${API_PORT} main:app"
 
     db:
         image: ${POSTGRES_IMAGE}
