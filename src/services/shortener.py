@@ -34,7 +34,7 @@ class ShortenerService:
         return f'{self._short_domain}/{slug}'
 
     def _make_slug(self, url: str) -> str:
-        return url.lstrip(f'{self._short_domain}/')
+        return url.replace(f'{self._short_domain}/', '')
 
     async def _save_with_original_slug(self, origin: str, max_attempts: int = 10) -> Optional[str]:
         if max_attempts > 0:

@@ -12,7 +12,7 @@ class ShortLinkRepoProtocol(Protocol):
     async def create_link(self, slug: str, origin: str) -> None:
         ...
 
-    async def find_origin(self, slug: str) -> Optional[str]:
+    async def find_origin(self, slug: str) -> str:
         ...
 
     async def remove_link(self, slug: str) -> None:
@@ -23,23 +23,19 @@ class ShortLinkRepo(DBRepo, ShortLinkRepoProtocol):
     async def create_link(self, slug: str, origin: str) -> None:
         try:
             query = sa.insert(short_links).values(slug=slug, origin=origin)
-            await self.db.execute(query)
-            await self.db.commit()
+            await self.apply_query(query)
         except IntegrityError:
             raise LinkCollision()
 
     async def find_origin(self, slug: str) -> str:
-        query = sa.select([short_links.c.origin]).where(short_links.c.slug == slug).limit(sa.literal(1))
-        cursor = await self.db.execute(query)
-        result = cursor.fetchone()
+        query = sa.select([short_links.c.origin]).where(short_links.c.slug == slug)
+        result = await self.fetch_single_value(query)
         if result is None:
             raise LinkNotFound()
-        return result[0]
+        return result
 
     async def remove_link(self, slug: str) -> None:
         query = sa.delete(short_links).where(short_links.c.slug == slug).returning(short_links.c.slug)
-        cursor = await self.db.execute(query)
-        if cursor.rowcount:
-            await self.db.commit()
-        else:
+        deleted = await self.apply_query(query)
+        if not deleted:
             raise LinkNotFound()
