@@ -1,13 +1,7 @@
-from typing import Optional
-
 from fastapi import FastAPI
 
-from config import settings
+from api.shortener import router as links_api
 
 
 app = FastAPI()
-
-
-@app.get('/')
-def stub():
-    return {'todo': 'api'}
+app.include_router(links_api, prefix='/api/v1/links')
