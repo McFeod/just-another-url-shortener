@@ -51,7 +51,7 @@ class ShortenerService:
         if slug:
             return self._make_url(slug=slug)
         return None
-    
+
     async def remove_short_url(self, url: str) -> None:
         await self._repo.remove_link(slug=self._make_slug(url=url))
 

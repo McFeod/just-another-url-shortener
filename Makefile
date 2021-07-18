@@ -9,3 +9,6 @@ shell: check_env
 
 attach:
 	docker-compose exec api bash
+
+lint: check_env
+	docker-compose run --rm api flake8

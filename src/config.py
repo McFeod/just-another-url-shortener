@@ -18,7 +18,7 @@ class DBSettings(BaseSettings):
     @property
     def alembic_dsn(self) -> str:
         return self.prepare_db_url('psycopg2')
-    
+
     class Config:
         env_prefix = 'db_'
 
