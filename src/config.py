@@ -6,9 +6,10 @@ class DBSettings(BaseSettings):
     user: str
     name: str
     password: str
+    port: int
 
     def prepare_db_url(self, driver: str) -> str:
-        return f'postgresql+{driver}://{self.user}:{self.password}@{self.host}/{self.name}'
+        return f'postgresql+{driver}://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}'
 
     @property
     def dsn(self) -> str:

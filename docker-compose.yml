@@ -23,15 +23,17 @@ services:
             - DB_USER=${POSTGRES_USER}
             - DB_NAME=${POSTGRES_DB}
             - DB_PASSWORD=${POSTGRES_PASSWORD}
+            - DB_PORT=${POSTGRES_PORT}
             - PREFERRED_SLUG_LENGTH=${PREFERRED_SLUG_LENGTH}
             - SHORT_DOMAIN=${SHORT_DOMAIN}
         depends_on:
             - db
-        command: bash -c "alembic upgrade head && uvicorn --host 0.0.0.0 --port ${API_PORT} main:app"
+        command: bash -c "alembic upgrade head && uvicorn --host 0.0.0.0 --port ${API_PORT} --reload main:app"
 
     db:
         image: ${POSTGRES_IMAGE}
         container_name: ${PROJECT_NAME}_postgres
+        restart: unless-stopped
         networks:
             - backend
         hostname: ${POSTGRES_HOSTNAME}

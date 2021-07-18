@@ -56,4 +56,4 @@ class ShortenerService:
         await self._repo.remove_link(slug=self._make_slug(url=url))
 
     async def get_full_url(self, url: str) -> str:
-        await self._repo.find_origin(slug=self._make_slug(url=url))
+        return await self._repo.find_origin(slug=self._make_slug(url=url))
