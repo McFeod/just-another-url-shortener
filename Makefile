@@ -7,5 +7,5 @@ dev: check_env
 shell: check_env
 	docker-compose run --rm api bash
 
-attach: dev
+attach:
 	docker-compose exec api bash
